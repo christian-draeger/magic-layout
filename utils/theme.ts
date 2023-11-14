@@ -11,17 +11,12 @@ export const theme = createTheme({
         },
     },
     palette: {
-        type: 'dark',
+        mode: 'dark',
         primary: {
             main: '#ea0a8e',
         },
         secondary: {
             main: '#ea0a8e',
         },
-    },
-    props: {
-        MuiTooltip: {
-            arrow: true,
-        },
-    },
+    }
 });

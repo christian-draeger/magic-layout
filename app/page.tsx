@@ -8,13 +8,11 @@ import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import PushPinIcon from "@mui/icons-material/PushPin";
-import UsageHint from "@/components/UsageHint";
 
 const Wrapper = styled('div')`
   padding: 2em;
   display: flex;
   justify-content: center;
-
 `;
 
 const generateRandomWidget = (index: number, columns: number) => {
@@ -45,7 +43,6 @@ export default function Home() {
     const [columns, setColumns] = useState(6);
     const [layout, setLayout] = useState<Layout[]>(generateRandomLayout(100, columns));
 
-    console.log(layout)
     const onAddItemClick = () => {
         setLayout([
             ...layout,
@@ -115,6 +112,13 @@ export default function Home() {
                         value={columns}
                         InputLabelProps={{
                             shrink: true,
+                        }}
+                        onChange={(e) => {
+                            const newColumns = Number(e.target.value);
+                            if (newColumns >= 1 && newColumns <= maxCols) {
+                                setColumns(newColumns);
+                            }
+
                         }}
                     />
                 </Stack>
