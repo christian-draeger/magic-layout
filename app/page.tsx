@@ -2,7 +2,7 @@
 
 import React, {useState} from "react";
 import {Layout} from "react-grid-layout";
-import {Alert, AlertTitle, Box, Button, Slider, Stack, styled, TextField, Typography} from "@mui/material";
+import {Alert, AlertTitle, Box, Button, Card, Slider, Stack, styled, TextField, Typography} from "@mui/material";
 import GridLayout from "@/components/GridLayout";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -58,7 +58,7 @@ export default function Home() {
         setLayout(prevLayout =>
             prevLayout.map(item => {
                 if (item.i === i) {
-                    return { ...item, static: !item.static };
+                    return {...item, static: !item.static};
                 }
                 return item;
             })
@@ -67,61 +67,65 @@ export default function Home() {
 
     return (
         <Wrapper>
-            <Box sx={{width: 900, p: 8, border: '5px dashed #ccc', borderRadius: 8}}>
+            <Stack justifyContent="center" alignItems="center"
+                   sx={{width: 950, p: 8, border: '5px dashed #ccc', borderRadius: 8}}>
 
                 <Alert severity="info" sx={{mb: 2, lineHeight: 2}}>
                     <AlertTitle>How to use</AlertTitle>
                     <p>
-                        <DragIndicatorIcon fontSize="small" sx={{verticalAlign: 'middle'}}/> <strong>Drag</strong> the widgets around to reposition them.
+                        <DragIndicatorIcon fontSize="small" sx={{verticalAlign: 'middle'}}/> <strong>Drag</strong> the
+                        widgets around to reposition them.
                     </p>
                     <p>
                         <strong>Resize</strong> the widgets by dragging the bottom right corner.
                     </p>
                     <p>
-                        <AddCircleOutlineIcon fontSize="small" sx={{verticalAlign: 'middle'}}/><strong>Add</strong> a new widget by clicking the button below.
+                        <AddCircleOutlineIcon fontSize="small" sx={{verticalAlign: 'middle'}}/><strong>Add</strong> a
+                        new widget by clicking the button below.
                     </p>
                     <p>
-                        <DeleteIcon fontSize="small" sx={{verticalAlign: 'middle'}}/><strong>Remove</strong> a widget by clicking the top right button on the widget.
+                        <DeleteIcon fontSize="small" sx={{verticalAlign: 'middle'}}/><strong>Remove</strong> a widget by
+                        clicking the top right button on the widget.
                     </p>
                     <p>
-                        <PushPinIcon fontSize="small" sx={{verticalAlign: 'middle'}}/><strong>Pin</strong> a widget by clicking the top left button on the widget.
+                        <PushPinIcon fontSize="small" sx={{verticalAlign: 'middle'}}/><strong>Pin</strong> a widget by
+                        clicking the top left button on the widget.
                     </p>
                 </Alert>
+                <Card sx={{width: '100%', p: 2}}>
+                    <Stack direction="row" spacing={2} alignItems="center" sx={{width: '100%'}}>
+                        <Button variant="outlined" startIcon={
+                            <AddCircleOutlineIcon/>
+                        } onClick={onAddItemClick}>Add Widget</Button>
+                        <Slider
+                            min={1}
+                            max={maxCols}
+                            step={1}
+                            value={[columns]}
+                            marks
+                            onChange={(_, newValue) => {
+                                if (Array.isArray(newValue)) {
+                                    setColumns(newValue[0]);
+                                }
+                            }}
+                        />
+                        <TextField
+                            type="number"
+                            label="Columns"
+                            value={columns}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            onChange={(e) => {
+                                const newColumns = Number(e.target.value);
+                                if (newColumns >= 1 && newColumns <= maxCols) {
+                                    setColumns(newColumns);
+                                }
 
-                <div>
-                    <Button variant="outlined" startIcon={
-                        <AddCircleOutlineIcon/>
-                    } onClick={onAddItemClick}>Add Widget</Button>
-                </div>
-                <Stack direction="row" spacing={2} alignItems="center">
-                    <Slider
-                        min={1}
-                        max={maxCols}
-                        step={1}
-                        value={[columns]}
-                        marks
-                        onChange={(_, newValue) => {
-                            if (Array.isArray(newValue)) {
-                                setColumns(newValue[0]);
-                            }
-                        }}
-                    />
-                    <TextField
-                        type="number"
-                        label="Columns"
-                        value={columns}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        onChange={(e) => {
-                            const newColumns = Number(e.target.value);
-                            if (newColumns >= 1 && newColumns <= maxCols) {
-                                setColumns(newColumns);
-                            }
-
-                        }}
-                    />
-                </Stack>
+                            }}
+                        />
+                    </Stack>
+                </Card>
                 <GridLayout
                     layout={layout}
                     columns={columns}
@@ -129,7 +133,7 @@ export default function Home() {
                     onRemoveItem={onRemoveItem}
                     onTogglePinItem={onTogglePinItem}
                 />
-            </Box>
+            </Stack>
         </Wrapper>
     )
 }
