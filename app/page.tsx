@@ -1,95 +1,125 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+
+import React, {useState} from "react";
+import {Layout} from "react-grid-layout";
+import {Alert, AlertTitle, Box, Button, Slider, Stack, styled, TextField} from "@mui/material";
+import GridLayout from "@/components/GridLayout";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DoNotTouchIcon from "@mui/icons-material/DoNotTouch";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
+const Wrapper = styled('div')`
+  padding: 2em;
+  display: flex;
+  justify-content: center;
+
+`;
+
+const generateRandomWidget = (index: number, columns: number) => {
+    const w = Math.floor(Math.random() * 3) + 1;
+    const h = Math.floor(Math.random() * 3) + 1;
+    const x = Math.floor(Math.random() * Math.max(1, columns - w + 1));
+
+    return {
+        i: `${index}`,
+        x,
+        y: Math.floor(Math.random() * 5),
+        w,
+        h,
+        isBounded: true,
+    };
+};
+
+const generateRandomLayout = (count: number, columns: number) => {
+    let layout = [];
+    for (let i = 0; i < count; i++) {
+        layout.push(generateRandomWidget(i, columns));
+    }
+    return layout;
+};
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    const maxCols = 12;
+    const [columns, setColumns] = useState(6);
+    const [layout, setLayout] = useState<Layout[]>(generateRandomLayout(100, columns));
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+    const onAddItemClick = () => {
+        setLayout([
+            ...layout,
+            {i: `${layout.length + 1}`, x: 0, y: 0, w: 2, h: 2},
+        ]);
+    }
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+    const onRemoveItem = (i: string) => {
+        setLayout(layout.filter(item => item.i !== i));
+    }
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+    const onTogglePinItem = (i: string) => {
+        // find item and toggle property static: true
+        const item = layout.find(item => item.i === i);
+        if (item) {
+            item.static = !item.static;
+            setLayout([...layout]);
+        }
+    }
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
+    return (
+        <Wrapper>
+            <Box sx={{width: 900, p: 8, border: '5px dashed #ccc', borderRadius: 8}}>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+                <Alert severity="info" sx={{mb: 2}}>
+                    <AlertTitle>How to use</AlertTitle>
+                    <p>
+                        <DragIndicatorIcon fontSize="small"/> <strong>Drag</strong> the widgets around to reposition them.
+                    </p>
+                    <p>
+                        <strong>Resize</strong> the widgets by dragging the bottom right corner.
+                    </p>
+                    <p>
+                        <AddCircleOutlineIcon fontSize="small"/><strong>Add</strong> a new widget by clicking the button below.
+                    </p>
+                    <p>
+                        <DeleteIcon fontSize="small"/><strong>Remove</strong> a widget by clicking the top right button on the widget.
+                    </p>
+                    <p>
+                        <DoNotTouchIcon fontSize="small"/><strong>Pin</strong> a widget by clicking the top left button on the widget.
+                    </p>
+                </Alert>
+
+                <div>
+                    <Button variant="outlined" startIcon={
+                        <AddCircleOutlineIcon/>
+                    } onClick={onAddItemClick}>Add Widget</Button>
+                </div>
+                <Stack direction="row" spacing={2} alignItems="center">
+                    <Slider
+                        min={1}
+                        max={maxCols}
+                        step={1}
+                        value={[columns]}
+                        marks
+                        onChange={(_, value) => {
+                            setColumns(value[0]);
+                        }}
+                    />
+                    <TextField
+                        type="number"
+                        label="Columns"
+                        value={columns}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                </Stack>
+                <GridLayout
+                    layout={layout}
+                    columns={columns}
+                    onLayoutChange={setLayout}
+                    onRemoveItem={onRemoveItem}
+                    onTogglePinItem={onTogglePinItem}
+                />
+            </Box>
+        </Wrapper>
+    )
 }
