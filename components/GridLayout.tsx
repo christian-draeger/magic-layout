@@ -5,7 +5,7 @@ import RGL, {Layout, WidthProvider} from 'react-grid-layout';
 import {Card, IconButton, styled} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-import DoNotTouchIcon from '@mui/icons-material/DoNotTouch';
+import PushPinIcon from '@mui/icons-material/PushPin';
 
 type GripWrapperProps = {
     width: number;
@@ -19,7 +19,7 @@ const GridWrapper = styled('div')<GripWrapperProps>`
 
 
 type GridLayoutItemProps = {
-    isPinned?: boolean;
+    pinned?: boolean;
 }
 const GridLayoutItem = styled(Card)<GridLayoutItemProps>`
     display: flex;
@@ -27,7 +27,7 @@ const GridLayoutItem = styled(Card)<GridLayoutItemProps>`
     justify-content: center;
     align-items: center;
     height: 100%;
-    background-color: ${({theme, isPinned}) => isPinned ? '#ccc' : theme.palette.primary.main};
+    background-color: ${({theme, pinned}) => pinned ? '#ccc' : theme.palette.primary.main};
     color: ${({theme}) => theme.palette.primary.contrastText};
 `;
 
@@ -58,7 +58,7 @@ const GridLayout = ({columns, layout, onLayoutChange, onRemoveItem, onTogglePinI
                 onLayoutChange={(newLayout) => onLayoutChange?.(newLayout)}
             >
                 {layout.map((item) => (
-                        <GridLayoutItem key={item.i} isPinned={item.static}>
+                        <GridLayoutItem key={item.i} pinned={item.static}>
                             <IconButton
                                 className="drag-handle"
                                 sx={{position: 'absolute', top: 0, left: 0, cursor: 'move'}}
@@ -78,7 +78,7 @@ const GridLayout = ({columns, layout, onLayoutChange, onRemoveItem, onTogglePinI
                             <IconButton
                                 onClick={() => onTogglePinItem?.(item.i)}
                             >
-                                <DoNotTouchIcon fontSize="small"/>
+                                <PushPinIcon fontSize="small"/>
                             </IconButton>
                             {item.w}:{item.h}
                         </GridLayoutItem>

@@ -1,31 +1,27 @@
 import { createTheme } from "@mui/material/styles";
 
 export const theme = createTheme({
-    typography: {
-        fontFamily: [
-            '-apple-system',
-            'BlinkMacSystemFont',
-            '"Segoe UI"',
-            'Roboto',
-            '"Helvetica Neue"',
-            'Arial',
-            'sans-serif',
-            '"Apple Color Emoji"',
-            '"Segoe UI Emoji"',
-            '"Segoe UI Symbol"',
-        ].join(','),
+    breakpoints: {
+        values: {
+            xs: 0,
+            sm: 600,
+            md: 900,
+            lg: 1200,
+            xl: 1536,
+        },
     },
     palette: {
-        background: {
-            // default: "#2a2a2a",
-            // paper: "#101010",
-        },
+        type: 'dark',
         primary: {
-            main: "#eb03fc",
-            // contrastText: "#fff",
+            main: '#ea0a8e',
         },
-        text: {
-            // primary: "#fff",
-        }
+        secondary: {
+            main: '#ea0a8e',
+        },
+    },
+    props: {
+        MuiTooltip: {
+            arrow: true,
+        },
     },
 });
