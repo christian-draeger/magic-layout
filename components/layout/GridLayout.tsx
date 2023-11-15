@@ -68,7 +68,7 @@ const GridLayout = ({columns, layout, isEditMode, preventCollision, onLayoutChan
                 onLayoutChange={(newLayout) => onLayoutChange?.(newLayout)}
             >
                 {layout.map((item) => (
-                        <GridLayoutItem key={item.i} pinned={item.static}>
+                        <GridLayoutItem key={item.i} pinned={item.static ? true : undefined}>
                             {isEditMode && (
                                 <>
                                     <IconButton

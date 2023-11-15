@@ -1,21 +1,23 @@
+"use client";
+
 import React, {useEffect, useState} from "react";
 import {Layout} from "react-grid-layout";
-import {Alert, AlertTitle, Button, Card, Slider, Stack, styled, TextField} from "@mui/material";
-import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import {Button, Card, Slider, Stack, TextField} from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import DeleteIcon from "@mui/icons-material/Delete";
-import PushPinIcon from "@mui/icons-material/PushPin";
 import PivotTableChartIcon from "@mui/icons-material/PivotTableChart";
 import SettingsOverscanIcon from "@mui/icons-material/SettingsOverscan";
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import GridLayout from "@/components/layout/GridLayout";
 
 const readPersistedLayout = (): Layout[] | null => {
-    const layout = localStorage.getItem('layout');
-    return JSON.parse(layout);
+    if (typeof window !== "undefined") {
+        const layout = localStorage.getItem('layout');
+        return layout && JSON.parse(layout);
+    }
+    return null;
 }
 
-const generateRandomWidget = (index: number, columns: number) => {
+const generateRandomWidget = (index: number, columns: number): Layout => {
     const w = Math.floor(Math.random() * 3) + 1;
     const h = Math.floor(Math.random() * 3) + 1;
     const x = Math.floor(Math.random() * Math.max(1, columns - w + 1));

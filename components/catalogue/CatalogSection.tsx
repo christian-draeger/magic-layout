@@ -4,7 +4,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import React, {PropsWithChildren} from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-const CatalogWidget = ({children}: PropsWithChildren) => {
+type CatalogWidgetProps = {
+    name: string;
+}
+
+const CatalogWidget = ({children, name}: PropsWithChildren<CatalogWidgetProps>) => {
     return (
         <div
             className="droppable-element"
@@ -14,7 +18,7 @@ const CatalogWidget = ({children}: PropsWithChildren) => {
         >
             <Card>
                 <CardHeader
-                    title="Widget Name"
+                    title={name}
                     action={
                         <>
                             <IconButton>
@@ -45,8 +49,11 @@ const CatalogSection = () => {
                     startIcon={<AddCircleOutlineIcon/>}
                 >Add Widget
                 </Button>
-                <CatalogWidget>
-                    Droppable Element (Drag me!)
+                <CatalogWidget name="Weather">
+                    A weather service widget.
+                </CatalogWidget>
+                <CatalogWidget name="Traffic Info">
+                    A Traffic Info widget. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                 </CatalogWidget>
             </Stack>
         </Stack>
